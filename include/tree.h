@@ -8,55 +8,55 @@
 class Tree {
     struct Node {
         char value;
-        std::vector<Node*> children;
+        std::vector<Node*> subscriber;
     };
 
     std::vector<char> result;
     Node* root = nullptr;
 
-    void create(std::vector<char> elements, Node* current) {
-        for (auto element : elements) {
-            if (element == current->value) {
-                elements.erase(std::remove(elements.begin(), elements.end(), element),
-                               elements.end());
-                for (auto childValue : elements) {
-                    Node* child = new Node;
-                    child->value = childValue;
-                    current->children.push_back(child);
+    void create(std::vector<char> elem, Node* cur) {
+        for (auto i : elem) {
+            if (i == cur->value) {
+                elem.erase(std::remove(elem.begin(),
+                elem.end(), i), elem.end());
+                for (auto subValue : elem) {
+                    Node* sub = new Node;
+                    sub->value = subValue;
+                    cur->subscriber.push_back(sub);
                 }
             }
         }
-        for (auto child : current->children) {
-            create(elements, child);
+        for (auto sub : cur->subscriber) {
+            create(elem, sub);
         }
     }
 
-    void generatePermutations(Node* current) {
-        if (current->children.empty()) {
-            result.push_back(current->value);
-            permutations.push_back(result);
+    void generateperm(Node* cur) {
+        if (cur->subscriber.empty()) {
+            result.push_back(cur->value);
+            perm.push_back(result);
             result.clear();
         }
-        for (auto child : current->children) {
-            result.push_back(current->value);
-            generatePermutations(child);
+        for (auto sub : cur->subscriber) {
+            result.push_back(cur->value);
+            generateperm(sub);
         }
     }
 
-public:
-    std::vector<std::vector<char>> permutations;
+ public:
+    std::vector<std::vector<char>> perm;
 
-    explicit Tree(std::vector<char> elements) {
+    explicit Tree(std::vector<char> elem) {
         root = new Node;
         root->value = ' ';
-        for (auto element : elements) {
-            Node* child = new Node;
-            child->value = element;
-            root->children.push_back(child);
+        for (auto i : elem) {
+            Node* sub = new Node;
+            sub->value = i;
+            root->subscriber.push_back(sub);
         }
-        for (auto child : root->children) {
-            create(elements, child);
-            generatePermutations(child);
+        for (auto sub : root->subscriber) {
+            create(elem, sub);
+            generateperm(sub);
             result.clear();
         }
     }
